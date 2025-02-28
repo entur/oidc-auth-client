@@ -1,0 +1,27 @@
+plugins {
+    id 'oidcAuth.library11-conventions'
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(11)
+    }
+}
+
+test {
+    systemProperty 'java.util.logging.config.file', 'src/test/resources/logging.properties'
+}
+
+dependencies {
+    api("org.slf4j:slf4j-api:${slf4jVersion}")
+    api("com.github.ben-manes.caffeine:caffeine:${caffeineVersion}")
+
+    implementation("com.auth0:auth0:${auth0JavaVersion}")
+
+    testRuntimeOnly("org.slf4j:slf4j-simple:2.0.16")
+    testImplementation("com.google.guava:guava-testlib:${guavaVersion}")
+}
+
+spotbugs {
+    excludeFilter = file("$projectDir/spotbugs-exclude.xml")
+}

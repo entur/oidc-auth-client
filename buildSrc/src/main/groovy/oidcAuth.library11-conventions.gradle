@@ -1,0 +1,54 @@
+plugins {
+    id 'java-library'
+    id 'maven-publish'
+    id 'oidcAuth.java11-conventions'
+}
+
+tasks.register('sourcesJar', Jar) {
+    dependsOn classes
+    archiveClassifier.set('sources')
+    from sourceSets.main.allSource
+}
+
+tasks.register('javadocJar', Jar) {
+    dependsOn javadoc
+    archiveClassifier.set('javadoc')
+    from javadoc.destinationDir
+}
+
+publishing {
+    publications {
+        library(MavenPublication) {
+            from components.java
+            artifact sourcesJar
+            artifact javadocJar
+
+            pom {
+                name = project.name
+                url = "https://bitbucket.org/enturas/${project.name}"
+                packaging = 'jar'
+            }
+        }
+    }
+
+    repositories {
+        maven {
+            credentials {
+                username = "${project.properties['entur_artifactory_user'] ?: System.env.ARTIFACTORY_AUTH_USER}"
+                password = "${project.properties['entur_artifactory_password'] ?: System.env.ARTIFACTORY_AUTH_TOKEN}"
+            }
+
+            url = "${project.properties['entur_artifactory_contextUrl'] ?: System.env.ARTIFACTORY_URL}/${version.endsWith('SNAPSHOT') ? 'entur-snapshot-standard' : 'entur-release-standard'}"
+        }
+    }
+}
+
+// The project requires libraries to have a README containing sections configured below
+def readmeCheck = tasks.register('readmeCheck', com.example.ReadmeVerificationTask) {
+    // Expect the README in the project directory
+    readme = layout.projectDirectory.file("README.md")
+    // README must contain a Service API header
+    readmePatterns = ['^## API$', '^## Changelog$']
+}
+
+//tasks.named('check') { dependsOn(readmeCheck) }

@@ -1,0 +1,30 @@
+plugins {
+    id 'oidcAuth.library-conventions'
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
+
+dependencies {
+    constraints {
+        implementation("ch.qos.logback:logback-classic:${logback14xVersion}")
+    }
+
+    api project(":oidc-client")
+
+    api("org.springframework.boot:spring-boot-autoconfigure:${springBoot3Version}")
+    api("org.springframework.boot:spring-boot-configuration-processor:${springBoot3Version}")
+    api("org.springframework.boot:spring-boot-starter-logging:${springBoot3Version}")
+
+    api("com.auth0:auth0:${auth0JavaVersion}")
+
+    testImplementation("org.springframework.boot:spring-boot-starter-web:${springBoot3Version}")
+    testImplementation("org.springframework.boot:spring-boot-starter-test:${springBoot3Version}")
+}
+
+spotbugs {
+    excludeFilter = file("$projectDir/spotbugs-exclude.xml")
+}

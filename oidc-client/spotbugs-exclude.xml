@@ -1,0 +1,6 @@
+<FindBugsFilter>
+	<Match>
+		<Class name="org.entur.auth.client.auth0.Auth0AccessTokenClient" />
+		<Bug pattern="EI_EXPOSE_REP2"/>
+	</Match>
+</FindBugsFilter>

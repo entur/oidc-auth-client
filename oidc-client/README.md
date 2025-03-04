@@ -28,7 +28,7 @@ Alternatively if Spring Boot integration is not needed:
 ```
 
 ## Configuration
-Application.yaml can be configured for one or more oidc clients.
+In Application.yaml, oidc-auth can be configured for one or more oidc clients.
 
 ### Single client
 
@@ -40,7 +40,7 @@ entur:
   client:
     shouldRefreshThreshold: 120 # Default=120. Time (seconds) before proactive token refresh. 
     mustRefreshThreshold: 60 # Default=60. Minimum time (seconds) before forced token refresh.
-    minThrottleTime: 1  # Default 1. Throttle time will raise exponential from min to max throttle time. 
+    minThrottleTime: 1  # Default 1. Throttle time will increase exponentially from min to max throttle time. 
     maxThrottleTime: 600 # Default 600 (10 minutes).
     auth0:
       clientId: <clientId>
@@ -49,16 +49,16 @@ entur:
       audience: <your audience>
 ```
 
-### Multiple client
+### Multiple clients
 Syntax for configuration multiple clients of AccessTokenFactory.
-The example below will set up clients with names myFirstClient and mySecondClient.
+The example below will set up clients multiple with the names "myFirstClient" and "mySecondClient".
 
 ```yaml
 entur:
   clients:
     shouldRefreshThreshold: 120 # Default=120. Time (seconds) before proactive token refresh. 
     mustRefreshThreshold: 60    # Default=60. Minimum time (seconds) before forced token refresh.
-    minThrottleTime: 1          # Default 1. Throttle time will raise exponential from min to max throttle time. 
+    minThrottleTime: 1          # Default 1. Throttle time will increase exponentially from min to max throttle time. 
     maxThrottleTime: 600        # Default 600 (10 minutes).
     auth0:
       myFirstClient:
@@ -80,7 +80,7 @@ entur:
 ## Usage
 
 ### Spring Boot
-In java Spring Boot application AccessTokenFactory can be auto wired:
+In a java Spring Boot application AccessTokenFactory can be auto wired:
 
 ```java
 @Autowired
@@ -88,13 +88,13 @@ In java Spring Boot application AccessTokenFactory can be auto wired:
 private AccessTokenFactory accessTokenFactory;
 ```
 
-A valid access token is retrieved from accessTokenFactory:
+A valid access token can then be retrieved from accessTokenFactory by doing the following:
 ```java
 var accessToken = accessTokenFactory.getAccessToken();
 ```
 
 ### Manually
-Without the Spring Boot integration an accessTokenFactory can be configured by code:
+An accessTokenFactory can also be configured directly outside of Spring Boot in-code:
 
 ```java
 var accessTokenFactory = new AccessTokenFactoryBuilder()
@@ -125,7 +125,7 @@ and then mock using
 when(accessTokenFactory.getAccessToken()).thenReturn("Bearer ABC");
 ```
 
-The starter will detect whether an existing AccessTokenFactory exists (in the above case the mock). See [example](src/test/java/org/entur/auth/client/MockConfigurationTest.java).
+The starter will detect whether an existing AccessTokenFactory exists (in the above case, the mock). See [example](src/test/java/org/entur/auth/client/MockConfigurationTest.java).
 
 ## Development
 Clone the repository:
@@ -145,15 +145,7 @@ mvn test
 ```
 
 ## Contributing
-Contributions are welcome! Please follow these steps:
-
-1. Fork the repository. (Click the "Fork" button on GitHub to create your copy of the repository.)
-2. Clone your fork. (git clone https://github.com/YOUR_GITHUB_USERNAME/oidc-auth-client.git)
-3. Create a feature branch (git checkout -b feature-xyz).
-4. Commit your changes (git commit -m "Add new feature").
-5. Push to your branch (git push origin feature-xyz).
-6. Open a pull request.
-7. A maintainer will review your PR and may request changes.
+Contributions are welcome! See [CONTRIBUTING](/CONTRIBUTING.md) for details.
 
 ## License
-This project is licensed under the EUPL-1.2 license. See [LICENSE](README.md) for details.
+This project is licensed under the EUPL-1.2 license. See [LICENSE](/README.md) for details.

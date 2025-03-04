@@ -1,6 +1,7 @@
 plugins {
     id 'java-library'
     id 'maven-publish'
+    id 'signing'
     id 'oidcAuth.java11-conventions'
 }
 
@@ -16,6 +17,17 @@ tasks.register('javadocJar', Jar) {
     from javadoc.destinationDir
 }
 
+signing {
+    useInMemoryPgpKeys(
+            findProperty("signingKey") ?: System.getenv("SONATYPE_GPG_KEY"),
+            findProperty("signingPassword") ?: System.getenv("SONATYPE_GPG_KEY_PASSWORD")
+    )
+
+    publishing.publications.withType(MavenPublication).configureEach {
+        sign it
+    }
+}
+
 publishing {
     publications {
         library(MavenPublication) {
@@ -23,32 +35,43 @@ publishing {
             artifact sourcesJar
             artifact javadocJar
 
+            groupId = project.group
+            artifactId = project.name
+            version = project.version
+
             pom {
                 name = project.name
-                url = "https://bitbucket.org/enturas/${project.name}"
                 packaging = 'jar'
+
+                url = "https://github.com/entur/${project.name}"
+
+                scm {
+                    connection = "scm:git:https://github.com/entur/${project.name}.git"
+                    developerConnection = "scm:git:https://github.com/entur/${project.name}.git"
+                    url = "https://github.com/entur/${project.name}"
+                }
+
+                licenses {
+                    license {
+                        name = "European Union Public Licence v. 1.2"
+                        url = "https://www.eupl.eu/"
+                    }
+                }
             }
         }
     }
 
     repositories {
         maven {
-            credentials {
-                username = "${project.properties['entur_artifactory_user'] ?: System.env.ARTIFACTORY_AUTH_USER}"
-                password = "${project.properties['entur_artifactory_password'] ?: System.env.ARTIFACTORY_AUTH_TOKEN}"
-            }
+            name = "Sonatype"
+            url = project.version.endsWith("-SNAPSHOT")
+                    ? "https://s01.oss.sonatype.org/content/repositories/snapshots/"
+                    : "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
 
-            url = "${project.properties['entur_artifactory_contextUrl'] ?: System.env.ARTIFACTORY_URL}/${version.endsWith('SNAPSHOT') ? 'entur-snapshot-standard' : 'entur-release-standard'}"
+            credentials {
+                username = findProperty("sonatypeUsername") ?: System.getenv("SONATYPE_AUTH_USER")
+                password = findProperty("sonatypePassword") ?: System.getenv("SONATYPE_AUTH_TOKEN")
+            }
         }
     }
 }
-
-// The project requires libraries to have a README containing sections configured below
-def readmeCheck = tasks.register('readmeCheck', com.example.ReadmeVerificationTask) {
-    // Expect the README in the project directory
-    readme = layout.projectDirectory.file("README.md")
-    // README must contain a Service API header
-    readmePatterns = ['^## API$', '^## Changelog$']
-}
-
-//tasks.named('check') { dependsOn(readmeCheck) }

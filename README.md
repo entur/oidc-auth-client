@@ -32,8 +32,8 @@ In Application.yaml, oidc-auth can be configured for one or more oidc clients.
 
 ### Single client
 
-Syntax for configuration of a single client of AccessTokenFactory. 
-The client will be named "auth0"
+Syntax for configuration of a single client of AccessTokenFactory.
+For single client configurations, the name will always be "auth0".
 
 ```yaml
 entur:

@@ -28,6 +28,11 @@ jobs:
         shell: bash
         run: |
           releaseVersion=$(cat ./gradle.properties | grep "version" | cut -d'=' -f2  | cut -d'-' -f1)
+          latestTag=$(git describe --tags --abbrev=0)
+          if [ "$releaseVersion" != "$latestTag" ]; then
+            echo "Error: Version in gradle.properties ($releaseVersion) does not match the latest Git tag ($latestTag)"
+            exit 1
+          fi
           sed -i "s/version=.*/version=$releaseVersion/" gradle.properties
 
       - name: Publish to JFrog

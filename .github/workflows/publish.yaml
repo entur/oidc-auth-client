@@ -1,4 +1,4 @@
-name: Publish to JFrog
+name: Publish to Sonatype
 on:
   release:
     types: [published]

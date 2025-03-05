@@ -35,7 +35,7 @@ jobs:
           fi
           sed -i "s/version=.*/version=$releaseVersion/" gradle.properties
 
-      - name: Publish to JFrog
+      - name: Publish to Sonatype
         run: ./gradlew publish
         env:
           SONATYPE_GPG_KEY: ${{ secrets.SONATYPE_GPG_KEY }}

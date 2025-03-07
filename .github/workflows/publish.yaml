@@ -64,7 +64,7 @@ jobs:
           releaseVersion=$(cat ./gradle.properties | grep "version" | cut -d'=' -f2  | cut -d'-' -f1)
           major=`echo $releaseVersion | cut -d. -f1`
           minor=`echo $releaseVersion | cut -d. -f2`
-          minor=$(("minor" + 1))
+          minor="$((minor + 1))"
           patch=`echo 0`
           nextSnapshotVersion="$major.$minor.$patch-SNAPSHOT"
           sed -i "s/version=.*/version=$nextSnapshotVersion/" gradle.properties

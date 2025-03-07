@@ -134,14 +134,14 @@ git clone https://github.com/entur/oidc-auth-client.git
 cd oidc-auth-client
 ```
 
-Build with Maven:
+Build with Gradle:
 ```shell
-mvn clean install
+./gradlew build
 ```
 
 Run tests:
 ```shell
-mvn test
+./gradlew test
 ```
 
 ## Contributing

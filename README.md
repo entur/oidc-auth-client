@@ -38,10 +38,10 @@ For single client configurations, the name will always be "auth0".
 ```yaml
 entur:
   client:
-    shouldRefreshThreshold: 120 # Default=120. Time (seconds) before proactive token refresh. 
-    mustRefreshThreshold: 60 # Default=60. Minimum time (seconds) before forced token refresh.
-    minThrottleTime: 1  # Default 1. Throttle time will increase exponentially from min to max throttle time. 
-    maxThrottleTime: 600 # Default 600 (10 minutes).
+    shouldRefreshThreshold: 120 # Time (seconds) before proactive token refresh. Default=120.
+    mustRefreshThreshold: 60    # Minimum time (seconds) before forced token refresh. Default=60.
+    minThrottleTime: 1          # Throttle time will increase exponentially from min to max throttle time. Default=1.
+    maxThrottleTime: 600        # Default 600 (10 minutes).
     auth0:
       clientId: <clientId>
       secret: <secret>
@@ -56,9 +56,9 @@ The example below will set up clients multiple with the names "myFirstClient" an
 ```yaml
 entur:
   clients:
-    shouldRefreshThreshold: 120 # Default=120. Time (seconds) before proactive token refresh. 
-    mustRefreshThreshold: 60    # Default=60. Minimum time (seconds) before forced token refresh.
-    minThrottleTime: 1          # Default 1. Throttle time will increase exponentially from min to max throttle time. 
+    shouldRefreshThreshold: 120 # Time (seconds) before proactive token refresh. Default=120.
+    mustRefreshThreshold: 60    # Minimum time (seconds) before forced token refresh. Default=60.
+    minThrottleTime: 1          # Throttle time will increase exponentially from min to max throttle time. Default=1.
     maxThrottleTime: 600        # Default 600 (10 minutes).
     auth0:
       myFirstClient:
@@ -91,6 +91,14 @@ private AccessTokenFactory accessTokenFactory;
 A valid access token can then be retrieved from accessTokenFactory by doing the following:
 ```java
 var accessToken = accessTokenFactory.getAccessToken();
+```
+
+RestTemplate with bearer token will be created with annotation:
+```java
+public class AuthData {
+    @AccessToken("auth0")
+    private RestTemplate restTemplate;
+}
 ```
 
 ### Manually

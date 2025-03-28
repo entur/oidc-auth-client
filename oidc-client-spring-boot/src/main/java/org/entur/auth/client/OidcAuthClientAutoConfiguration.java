@@ -4,17 +4,21 @@ package org.entur.auth.client;
 import org.entur.auth.client.properties.OidcAuthClientAuth0Properties;
 import org.entur.auth.client.properties.OidcAuthClientProperties;
 import org.entur.auth.client.properties.OidcAuthClientsProperties;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.BeanDefinitionRegistryPostProcessor;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.context.properties.bind.Binder;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.EnvironmentAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -136,6 +140,42 @@ public class OidcAuthClientAutoConfiguration {
                     .withMinThrottleTime(beanProperties.getMinThrottleTime() != null ? beanProperties.getMinThrottleTime() : clientsProperties.getMinThrottleTime())
                     .withMaxThrottleTime(beanProperties.getMaxThrottleTime() != null ? beanProperties.getMaxThrottleTime() : clientsProperties.getMaxThrottleTime())
                     .buildAuth0();
+        }
+    }
+
+    /**
+     * A {@link BeanPostProcessor} that processes beans annotated with access token-related annotations.
+     * This processor ensures that beans are properly initialized with access token handling capabilities.
+     *
+     * <p>The processor is only active if {@code org.springframework.web.client.RestTemplate} is present
+     * in the classpath, making it conditional on the presence of Spring's {@code RestTemplate}.</p>
+     *
+     * <p>It utilizes the {@link AccessTokenProcessor} to perform the actual processing before initialization.</p>
+     */
+    @Component
+    @ConditionalOnClass(name = "org.springframework.web.client.RestTemplate")
+    static class AccessTokenAnnotationProcessor implements BeanPostProcessor {
+        private final ApplicationContext applicationContext;
+
+        /**
+         * Constructs an instance of {@code AccessTokenAnnotationProcessor}.
+         *
+         * @param applicationContext the application context, used to retrieve necessary beans
+         */
+        public AccessTokenAnnotationProcessor(ApplicationContext applicationContext) {
+            this.applicationContext = applicationContext;
+        }
+
+        /**
+         * Processes beans before their initialization to handle access token-related annotations.
+         *
+         * @param bean     the bean instance being processed
+         * @param beanName the name of the bean
+         * @return the processed bean, potentially wrapped or modified
+         */
+        @Override
+        public Object postProcessBeforeInitialization(@NotNull Object bean, @NotNull String beanName) {
+            return AccessTokenProcessor.postProcessBeforeInitialization(applicationContext, bean, beanName);
         }
     }
 }

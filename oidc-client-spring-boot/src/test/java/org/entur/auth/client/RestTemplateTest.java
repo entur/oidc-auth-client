@@ -1,17 +1,16 @@
 package org.entur.auth.client;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import org.entur.auth.client.auth0.Auth0AccessTokenClient;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.web.client.RestTemplate;
+
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @TestPropertySource(properties = {
         "entur.client.auth0.clientId=xxx",
@@ -25,17 +24,17 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
-public class Auth0ConfigurationTest {
+class RestTemplateTest {
 
-    @Autowired
-    private AccessTokenFactory accessTokenFactory;
+    @AccessToken
+    RestTemplate restTemplate;
 
     @LocalServerPort
     private int randomServerPort;
 
     @Test 
-    public void testCreate() {
-        assertTrue(accessTokenFactory.getClient() instanceof Auth0AccessTokenClient);
-    }    
+    void testCreate() throws AccessTokenUnavailableException {
+        assertNotNull(restTemplate);
+    }
 
 }

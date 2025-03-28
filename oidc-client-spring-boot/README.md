@@ -1,4 +1,4 @@
-# oidc-auth-client
+# oidc-client-spring-boot
 oidc-auth-client is a Java and Spring Boot library for retrieving and caching access tokens from an OpenID Connect (OIDC) provider.
 It simplifies authentication by handling token acquisition, caching, and renewal, making secure API calls easier.
 
@@ -18,15 +18,6 @@ Add the dependency to your project:
 </dependency>
 ```
 
-Alternatively if Spring Boot integration is not needed:
-```
-<dependency>
-    <groupId>org.entur.auth.client</groupId>
-    <artifactId>oidc-client</artifactId>
-    <version>1.0.0</version>
-</dependency>
-```
-
 ## Configuration
 In Application.yaml, oidc-auth can be configured for one or more oidc clients.
 
@@ -38,10 +29,10 @@ For single client configurations, the name will always be "auth0".
 ```yaml
 entur:
   client:
-    shouldRefreshThreshold: 120 # Default=120. Time (seconds) before proactive token refresh. 
-    mustRefreshThreshold: 60 # Default=60. Minimum time (seconds) before forced token refresh.
-    minThrottleTime: 1  # Default 1. Throttle time will increase exponentially from min to max throttle time. 
-    maxThrottleTime: 600 # Default 600 (10 minutes).
+    shouldRefreshThreshold: 120 # Time (seconds) before proactive token refresh. Default=120.
+    mustRefreshThreshold: 60    # Minimum time (seconds) before forced token refresh. Default=60. 
+    minThrottleTime: 1          # Throttle time will increase exponentially from min to max throttle time. Default=1.
+    maxThrottleTime: 600        # Default 600 (10 minutes).
     auth0:
       clientId: <clientId>
       secret: <secret>
@@ -56,9 +47,9 @@ The example below will set up clients multiple with the names "myFirstClient" an
 ```yaml
 entur:
   clients:
-    shouldRefreshThreshold: 120 # Default=120. Time (seconds) before proactive token refresh. 
-    mustRefreshThreshold: 60    # Default=60. Minimum time (seconds) before forced token refresh.
-    minThrottleTime: 1          # Default 1. Throttle time will increase exponentially from min to max throttle time. 
+    shouldRefreshThreshold: 120 # Time (seconds) before proactive token refresh. Default=120.
+    mustRefreshThreshold: 60    # Minimum time (seconds) before forced token refresh. Default=60.
+    minThrottleTime: 1          # Throttle time will increase exponentially from min to max throttle time. Default=1.
     maxThrottleTime: 600        # Default 600 (10 minutes).
     auth0:
       myFirstClient:
@@ -93,22 +84,12 @@ A valid access token can then be retrieved from accessTokenFactory by doing the 
 var accessToken = accessTokenFactory.getAccessToken();
 ```
 
-### Manually
-An accessTokenFactory can also be configured directly outside of Spring Boot in-code:
-
+RestTemplate with bearer token will be created with annotation: 
 ```java
-var accessTokenFactory = new AccessTokenFactoryBuilder()
-        .withDomain(oidcAuthProperties.getDomain())
-        .withClientSecret(oidcAuthProperties.getSecret())
-        .withClientId(oidcAuthProperties.getClientId())
-        .withAudience(oidcAuthProperties.getAudience())
-        .withMustRefreshThreshold(oidcAuthProperties.getMustRefreshThreshold())
-        .withShouldRefreshThreshold(oidcAuthProperties.getShouldRefreshThreshold())
-        .withMinThrottleTime(oidcAuthProperties.getMinThrottleTime())
-        .withMaxThrottleTime(oidcAuthProperties.getMaxThrottleTime())
-        .buildAuth0();
-
-var accessToken = accessTokenFactory.getAccessToken();
+public class AuthData {
+    @AccessToken("auth0")
+    private RestTemplate restTemplate;
+}
 ```
 
 ## Testing

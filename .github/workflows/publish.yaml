@@ -37,8 +37,8 @@ jobs:
           NEW_VERSION: ${{ steps.increment-version.outputs.version }}
         run:
           snapshot_version="$NEW_VERSION-SNAPSHOT"
-          echo "VERSION=$release_version" >> $GITHUB_ENV
-          echo "version=$release_version" >> $GITHUB_OUTPUT 
+          echo "VERSION=$snapshot_version" >> $GITHUB_ENV
+          echo "version=$snapshot_version" >> $GITHUB_OUTPUT 
 
       - name: Update Version
         uses: entur/gha-maven-central/.github/actions/update-version@v1

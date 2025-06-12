@@ -5,13 +5,14 @@ on:
 
 jobs:
   publish:
-    name: Publish to Maven Central
-    uses: entur/gha-maven-central/.github/workflows/gradle-publish.yml@brand-new
+    name: Publish Release to Maven Central
+    uses: entur/gha-maven-central/.github/workflows/gradle-publish.yml@v1
     with:
       # Fetch newest versions from tags
       version_strategy: 'tag'
       version_tag_prefix: ''
-      # Keep version as is, do not bump
+      # Keep version as is (do not bump) since we have already published the new tag.
+      # We will update the version manually in a later job
       next_version: ''
       push_to_repo: false
     secrets: inherit
@@ -22,18 +23,24 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-        with:
-          persist-credentials: false
 
       - name: Increment Version
         id: increment-version
-        uses: entur/gha-maven-central/.github/actions/increment-version@brand-new
+        uses: entur/gha-maven-central/.github/actions/increment-version@v1
         with:
           previous_version: ${{ needs.publish.outputs.version }}
-          next_version_suffix: "-SNAPSHOT"
+
+      - name: Mark Version As Snapshot
+        id: snapshot-version
+        shell: bash
+        env: 
+          NEW_VERSION: ${{ steps.increment-version.outputs.version }}
+        run:
+          snapshot_version="$NEW_VERSION-SNAPSHOT"
+          echo "VERSION=$release_version" >> $GITHUB_ENV
+          echo "version=$release_version" >> $GITHUB_OUTPUT 
 
       - name: Update Version
-        id: update-version
-        uses: entur/gha-maven-central/.github/actions/update-version@brand-new
+        uses: entur/gha-maven-central/.github/actions/update-version@v1
         with:
-          version: ${{ steps.increment-version.outputs.version }}
+          version: ${{ steps.snapshot-version.outputs.version }}

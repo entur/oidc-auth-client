@@ -5,7 +5,8 @@ on:
       next_version:
         description: "Version"
         required: false
-        default: "auto"
+        # Use snapshot-version defined in the file by default
+        default: ""
 
 jobs:
   publish:

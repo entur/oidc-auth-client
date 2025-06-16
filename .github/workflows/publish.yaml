@@ -44,3 +44,4 @@ jobs:
         uses: entur/gha-maven-central/.github/actions/update-version@v1
         with:
           version: ${{ steps.snapshot-version.outputs.version }}
+          version_file_name: "version_file_name"

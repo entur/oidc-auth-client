@@ -1,47 +1,21 @@
-name: Publish to Sonatype
+name: Publish Snapshot to Sonatype
 on:
-  release:
-    types: [published]
+  workflow_dispatch:
+    inputs:
+      next_version:
+        description: "Version bump"
+        required: false
+        type: choice
+        options:
+          - major
+          - minor
+          - patch
+        default: "patch"
 
 jobs:
   publish:
-    name: Publish Release to Maven Central
+    name: Publish Snapshot to Maven Central
     uses: entur/gha-maven-central/.github/workflows/gradle-publish.yml@v1
     with:
-      # Fetch newest versions from tags
-      version_strategy: 'tag'
-      version_tag_prefix: ''
-      # Keep version as is (do not bump) since we have already published the new tag.
-      # We will update the version manually in a later job
-      next_version: ''
-      push_to_repo: false
+      next_version: ${{ inputs.next_version }}
     secrets: inherit
-
-  update-version:
-    runs-on: ubuntu-latest
-    needs: publish
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Increment Version
-        id: increment-version
-        uses: entur/gha-maven-central/.github/actions/increment-version@v1
-        with:
-          previous_version: ${{ needs.publish.outputs.version }}
-
-      - name: Mark Version As Snapshot
-        id: snapshot-version
-        shell: bash
-        env: 
-          NEW_VERSION: ${{ steps.increment-version.outputs.version }}
-        run:
-          snapshot_version="$NEW_VERSION-SNAPSHOT"
-          echo "VERSION=$snapshot_version" >> $GITHUB_ENV
-          echo "version=$snapshot_version" >> $GITHUB_OUTPUT 
-
-      - name: Update Version
-        uses: entur/gha-maven-central/.github/actions/update-version@v1
-        with:
-          version: ${{ steps.snapshot-version.outputs.version }}
-          version_file_name: "gradle.properties"

@@ -1,19 +1,13 @@
 name: Publish Snapshot to Sonatype
 on:
   workflow_dispatch:
-    inputs:
-      next_version:
-        description: "Version"
-        required: false
-        # Use snapshot-version defined in the file by default
-        default: ""
 
 jobs:
   publish:
     name: Publish Snapshot to Maven Central
     uses: entur/gha-maven-central/.github/workflows/gradle-publish.yml@v1
     with:
-      next_version: ${{ inputs.next_version }}
+      next_version: ''
       push_to_repo: false
       snapshot: true
     secrets: inherit

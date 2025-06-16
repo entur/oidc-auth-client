@@ -93,10 +93,4 @@ jreleaser {
             }
         }
     }
-    release {
-        github {
-            skipTag = true
-            skipRelease = true
-        }
-    }
 }

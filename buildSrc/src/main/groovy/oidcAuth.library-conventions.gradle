@@ -93,11 +93,4 @@ jreleaser {
             }
         }
     }
-    release {
-        github {
-            changelog {
-                append = true
-            }
-        }
-    }
 }

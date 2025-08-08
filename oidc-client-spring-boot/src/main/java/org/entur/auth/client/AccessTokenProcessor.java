@@ -33,16 +33,30 @@ class AccessTokenProcessor {
         Class<?> clazz = bean.getClass();
         ReflectionUtils.doWithFields(clazz, field -> {
             if (field.isAnnotationPresent(AccessToken.class)) {
-                if (RestTemplate.class.isAssignableFrom(field.getType())) {
-                    AccessTokenAnnotationRestTemplateProcessor.inject(applicationContext, bean, field);
-                } else if(AccessTokenFactory.class.isAssignableFrom(field.getType())) {
+                if(AccessTokenFactory.class.isAssignableFrom(field.getType())) {
                     AccessTokenAnnotationAccessTokenFactoryProcessor.inject(applicationContext, bean, field);
+                } else if (isAssignableFrom(applicationContext.getClassLoader(), field.getType())) {
+                    AccessTokenAnnotationRestTemplateProcessor.inject(applicationContext, bean, field);
                 }
             }
         });
 
         return bean;
     }
+
+    private static boolean isAssignableFrom(ClassLoader classLoader,
+                                            Class<?> targetType) {
+
+        var candidateClassName = "org.springframework.web.client.RestTemplate";
+        try {
+            ClassLoader ccl = Thread.currentThread().getContextClassLoader();
+            Class<?> candidate = Class.forName(candidateClassName, false, ccl == null ? classLoader : ccl);
+            return candidate.isAssignableFrom(targetType);
+        } catch (ClassNotFoundException | LinkageError ignored) {
+            return false;
+        }
+    }
+
     /**
      * Internal processor responsible for injecting {@link AccessTokenFactory} instances into fields annotated with {@link AccessToken}.
      */

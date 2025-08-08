@@ -10,17 +10,9 @@ java {
 }
 
 dependencies {
-    constraints {
-        implementation("ch.qos.logback:logback-classic:${logback14xVersion}")
-    }
-
     api project(":oidc-client")
 
-    api("org.springframework.boot:spring-boot-autoconfigure:${springBoot3Version}")
-    api("org.springframework.boot:spring-boot-configuration-processor:${springBoot3Version}")
-    api("org.springframework.boot:spring-boot-starter-logging:${springBoot3Version}")
-
-    api("com.auth0:auth0:${auth0JavaVersion}")
+    implementation("com.auth0:auth0:${auth0JavaVersion}")
 
     implementation("org.springframework.boot:spring-boot-starter-web:${springBoot3Version}")
 

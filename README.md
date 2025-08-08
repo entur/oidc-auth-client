@@ -11,20 +11,18 @@ It simplifies authentication by handling token acquisition, caching, and renewal
 ## Installation
 Add the dependency to your project:
 ```
-<dependency>
-    <groupId>org.entur.auth.client</groupId>
-    <artifactId>oidc-client-spring-boot</artifactId>
-    <version>1.0.0</version>
-</dependency>
+implementation("org.entur.auth.client:oidc-client-spring-boot:${oidcClientVersion}")
+implementation("com.auth0:auth0:${auth0JavaVersion}")
 ```
+
+> [!IMPORTANT]
+> If your project don't have Spring Auto Configure enabled you need to import OidcAuthClientAutoConfiguration manually.
+
 
 Alternatively if Spring Boot integration is not needed:
 ```
-<dependency>
-    <groupId>org.entur.auth.client</groupId>
-    <artifactId>oidc-client</artifactId>
-    <version>1.0.0</version>
-</dependency>
+implementation("org.entur.auth.client:oidc-client:${oidcClientVersion}")
+implementation("com.auth0:auth0:${auth0JavaVersion}")
 ```
 
 ## Configuration

@@ -1,13 +1,13 @@
 plugins {
     id 'com.github.ben-manes.versions' version '0.52.0' apply false
-    id "com.github.spotbugs" version "6.2.0" apply false
-    id 'org.jreleaser' version "1.18.0" apply false
+    id "com.github.spotbugs" version "6.2.4" apply false
+    id 'org.jreleaser' version "1.19.0" apply false
 }
 
 subprojects {
     ext {
         javaJwtVersion = '4.5.0'
-        auth0JavaVersion = '2.22.0'
+        auth0JavaVersion = '2.23.0'
         junitPlatformVersion = '1.12.2'
         junitJupiterVersion  = '5.13.1'
         wiremockVersion = '3.12.0'
@@ -18,8 +18,8 @@ subprojects {
         apacheCommonsCodecVersion = '1.16.1'
         lombokVersion = '1.18.36'
         jjwtVersion = '0.12.6'
-        springBoot3Version = '3.5.3'
-        caffeineVersion = "3.2.1"
+        springBoot3Version = '3.5.4'
+        caffeineVersion = "3.2.2"
         jaxbVersion = '4.0.2'
         glassfishJaxbVersion = '4.0.5'
 

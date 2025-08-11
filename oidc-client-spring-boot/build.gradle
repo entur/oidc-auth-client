@@ -12,7 +12,7 @@ java {
 dependencies {
     api project(":oidc-client")
 
-    implementation("com.auth0:auth0:${auth0JavaVersion}")
+    api("com.auth0:auth0:${auth0JavaVersion}")
 
     implementation("org.springframework.boot:spring-boot-starter-web:${springBoot3Version}")
 

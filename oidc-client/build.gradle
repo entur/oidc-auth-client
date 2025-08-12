@@ -1,11 +1,11 @@
 plugins {
-    id 'oidcAuth.java11-conventions'
+    id 'oidcAuth.java-conventions'
     id 'oidcAuth.library-conventions'
 }
 
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(11)
+        languageVersion = JavaLanguageVersion.of(17)
     }
 }
 

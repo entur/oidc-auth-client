@@ -33,7 +33,7 @@ class AccessTokenProcessor {
         Class<?> clazz = bean.getClass();
         ReflectionUtils.doWithFields(clazz, field -> {
             if (field.isAnnotationPresent(AccessToken.class)) {
-                if(AccessTokenFactory.class.isAssignableFrom(field.getType())) {
+                if (AccessTokenFactory.class.isAssignableFrom(field.getType())) {
                     AccessTokenAnnotationAccessTokenFactoryProcessor.inject(applicationContext, bean, field);
                 } else if (isAssignableFrom(applicationContext.getClassLoader(), field.getType())) {
                     AccessTokenAnnotationRestTemplateProcessor.inject(applicationContext, bean, field);

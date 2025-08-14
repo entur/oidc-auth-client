@@ -1,6 +1,7 @@
 package org.entur.auth.client;
 
-import static com.google.common.truth.Truth.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
@@ -33,12 +34,12 @@ public class AccessTokenFactoryTest {
 
         ConfigurableClockAccessTokenFactory factory = getConfigurableClockFactory(client);
         String accessToken = factory.getAccessToken();
-        assertThat(accessToken).isEqualTo(first.getAccessToken());
+        assertEquals(first.getAccessToken(), accessToken);
 
         factory.incrementTime((300 - 20) * 1000);
 
         accessToken = factory.getAccessToken();
-        assertThat(accessToken).isEqualTo(first.getAccessToken());
+        assertEquals(first.getAccessToken(), accessToken);
 
         factory.incrementTime(50 * 1000);
 
@@ -62,11 +63,11 @@ public class AccessTokenFactoryTest {
         AccessTokenFactory factory = getFactory(client);
 
         String accessToken = factory.getAccessToken();
-        assertThat(accessToken).isEqualTo(response.getAccessToken());
+        assertEquals(response.getAccessToken(), accessToken);
 
         // check that existing session is reused
         accessToken = factory.getAccessToken();
-        assertThat(accessToken).isEqualTo(response.getAccessToken());
+        assertEquals(response.getAccessToken(), accessToken);
 
         verify(client, times(1)).requestAccessToken();
         verify(client, never()).renewAccessToken(any(String.class));
@@ -85,7 +86,8 @@ public class AccessTokenFactoryTest {
         ConfigurableClockAccessTokenFactory factory = getConfigurableClockFactory(client);
 
         String accessToken = factory.getAccessToken();
-        assertThat(accessToken).isEqualTo(first.getAccessToken());
+        assertEquals(first.getAccessToken(), accessToken);
+
 
         // simulate leap in time
         factory.incrementTime((300 - 20) * 1000);
@@ -94,8 +96,8 @@ public class AccessTokenFactoryTest {
         accessToken = factory.getAccessToken();
         Thread.currentThread().sleep(200);
         accessToken = factory.getAccessToken();
-        assertThat(accessToken).isNotEqualTo(first.getAccessToken());
-        assertThat(accessToken).isEqualTo(second.getAccessToken());
+        assertNotEquals(first.getAccessToken(), accessToken);
+        assertEquals(second.getAccessToken(), accessToken);
 
         verify(client, times(2)).requestAccessToken();
         verify(client, never()).renewAccessToken(any(String.class));
@@ -114,10 +116,10 @@ public class AccessTokenFactoryTest {
         AccessTokenFactory factory = getFactory(client);
 
         String accessToken = factory.getAccessToken();
-        assertThat(accessToken).isEqualTo(first.getAccessToken());
+        assertEquals(first.getAccessToken(), accessToken);
 
         accessToken = factory.getAccessToken();
-        assertThat(accessToken).isEqualTo(first.getAccessToken());
+        assertEquals(first.getAccessToken(), accessToken);
 
         verify(client, times(1)).requestAccessToken();
         verify(client, never()).renewAccessToken(any(String.class));
@@ -136,14 +138,14 @@ public class AccessTokenFactoryTest {
         ConfigurableClockAccessTokenFactory factory = getConfigurableClockFactory(client);
 
         String accessToken = factory.getAccessToken();
-        assertThat(accessToken).isEqualTo(first.getAccessToken());
+        assertEquals(first.getAccessToken(), accessToken);
 
         // simulate leap in time
         factory.incrementTime((300 - 9) * 1000);
 
         // check that existing session is refreshed
         accessToken = factory.getAccessToken();
-        assertThat(accessToken).isEqualTo(second.getAccessToken());
+        assertEquals(second.getAccessToken(), accessToken);
 
         verify(client, times(2)).requestAccessToken();
         verify(client, never()).renewAccessToken(any(String.class));

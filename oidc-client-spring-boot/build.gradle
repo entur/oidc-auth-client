@@ -15,6 +15,7 @@ dependencies {
     api("com.auth0:auth0:${auth0JavaVersion}")
 
     implementation("org.springframework.boot:spring-boot-starter-web:${springBoot3Version}")
+    implementation("org.jetbrains:annotations:${jetbrainsAnnotationsVersion}")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test:${springBoot3Version}")
 }

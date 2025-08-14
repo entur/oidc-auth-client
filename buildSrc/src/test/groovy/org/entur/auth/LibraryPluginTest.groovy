@@ -1,4 +1,4 @@
-package com.example
+package org.entur.auth
 
 import org.gradle.testkit.runner.TaskOutcome
 
@@ -17,7 +17,7 @@ class LibraryPluginTest extends PluginTest {
         readmeContainingMandatorySectionsExists()
         buildFile << """
             dependencies {
-                api 'org.apache.commons:commons-lang3:3.4'
+                api 'org.apache.commons:commons-lang3:18.0'
             }
         """
 

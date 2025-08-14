@@ -1,4 +1,4 @@
-package com.example
+package org.entur.auth
 
 import org.gradle.testkit.runner.GradleRunner
 import spock.lang.Specification

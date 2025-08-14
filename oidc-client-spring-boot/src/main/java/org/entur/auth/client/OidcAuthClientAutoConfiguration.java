@@ -4,7 +4,6 @@ package org.entur.auth.client;
 import org.entur.auth.client.properties.OidcAuthClientAuth0Properties;
 import org.entur.auth.client.properties.OidcAuthClientProperties;
 import org.entur.auth.client.properties.OidcAuthClientsProperties;
-import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
@@ -174,7 +173,7 @@ public class OidcAuthClientAutoConfiguration {
          * @return the processed bean, potentially wrapped or modified
          */
         @Override
-        public Object postProcessBeforeInitialization(@NotNull Object bean, @NotNull String beanName) {
+        public Object postProcessBeforeInitialization(Object bean, String beanName) {
             return AccessTokenProcessor.postProcessBeforeInitialization(applicationContext, bean, beanName);
         }
     }

@@ -1,0 +1,15 @@
+apiVersion: entur.io/securitytools/v1
+kind: DockerScanConfig
+metadata:
+  id: oidcauthclientallowlist
+  name: oidc-auth-client-allow-list
+  owner: team-sikkerhet
+spec:
+  allowlist:
+    - cve: "CVE-2025-4949"
+      comment: "Eclipse JGit XML External Entity (XXE) Vulnerability"
+      reason: "wont_fix"
+    - cve: "CVE-2025-48924"
+      comment: "Apache Commons Lang is vulnerable to Uncontrolled Recursion when processing long inputs"
+      reason: "wont_fix"
+

@@ -1,7 +1,8 @@
 plugins {
+    id 'base'
+    id 'org.jreleaser' version "1.19.0"
     id 'com.github.ben-manes.versions' version '0.52.0' apply false
     id "com.github.spotbugs" version "6.2.4" apply false
-    id 'org.jreleaser' version "1.19.0" apply false
 }
 
 subprojects {
@@ -18,5 +19,40 @@ subprojects {
         slf4jVersion = '2.0.17'
         jacksonDatabindVersion = '2.14.3'
         logback14xVersion = '1.5.18'
+    }
+}
+
+jreleaser {
+    signing {
+        active = 'ALWAYS'
+        armored = true
+    }
+    deploy {
+        maven {
+            mavenCentral {
+                release {
+                    active = 'RELEASE'
+                    url = 'https://central.sonatype.com/api/v1/publisher'
+                    stagingRepository('build/staging-deploy')
+                }
+            }
+            nexus2 {
+                snapshot {
+                    active = 'SNAPSHOT'
+                    applyMavenCentralRules = true
+                    snapshotSupported = true
+                    closeRepository = true
+                    releaseRepository = true
+                    url = "https://ossrh-staging-api.central.sonatype.com/service/local"
+                    snapshotUrl = 'https://central.sonatype.com/repository/maven-snapshots/'
+                    stagingRepository('build/staging-deploy')
+                }
+            }
+        }
+    }
+    release {
+        github {
+            enabled = true
+        }
     }
 }

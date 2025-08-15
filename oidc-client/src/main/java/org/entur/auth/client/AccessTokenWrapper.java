@@ -1,20 +1,18 @@
 package org.entur.auth.client;
 
-/**
- * Wrapper for an access token that tracks its creation time, expiration, and refresh threshold.
- */
+/** Wrapper for an access token that tracks its creation time, expiration, and refresh threshold. */
 public class AccessTokenWrapper {
     private final TokenHolder tokenHolder;
-    private final long tokenCrateTimestamp;   // Timestamp when the token was created
-    private final long expiresIn;  // Token validity duration in seconds
-    private long mustRefreshThreshold;   // Threshold before expiration to trigger refresh
+    private final long tokenCrateTimestamp; // Timestamp when the token was created
+    private final long expiresIn; // Token validity duration in seconds
+    private long mustRefreshThreshold; // Threshold before expiration to trigger refresh
 
     /**
      * Constructs an AccessTokenWrapper.
      *
-     * @param tokenHolder          The holder object containing the access token.
-     * @param tokenCrateTimestamp  The timestamp when the token was created.
-     * @param expiresIn            The duration in seconds before the token expires.
+     * @param tokenHolder The holder object containing the access token.
+     * @param tokenCrateTimestamp The timestamp when the token was created.
+     * @param expiresIn The duration in seconds before the token expires.
      */
     public AccessTokenWrapper(TokenHolder tokenHolder, long tokenCrateTimestamp, long expiresIn) {
         this.tokenHolder = tokenHolder;
@@ -61,5 +59,4 @@ public class AccessTokenWrapper {
     private long ageInSeconds(long now) {
         return (now - tokenCrateTimestamp) / 1000;
     }
-
 }

@@ -1,11 +1,11 @@
 plugins {
     id 'java'
-    id 'checkstyle'
     id 'jacoco'
     id 'eclipse'
     id 'idea'
 
     // NOTE: external plugin version is specified in implementation dependency artifact of the project's build file
+    id 'com.diffplug.spotless'
     id 'com.github.spotbugs'
     id 'com.github.ben-manes.versions'
 }
@@ -49,15 +49,18 @@ repositories {
  * Code quality plugins
  *************************************************************/
 
-checkstyle {
-    config = resources.text.fromString(org.entur.auth.CheckstyleUtil.getCheckstyleConfig("/checkstyle.xml"))
-    maxWarnings = 0
-}
-
 spotbugsMain {
     reports {
         xml.enabled = false
         html.enabled = true
+    }
+}
+
+spotless {
+    java {
+        googleJavaFormat("1.17.0")
+        indentWithTabs(2)
+        indentWithSpaces(4)
     }
 }
 

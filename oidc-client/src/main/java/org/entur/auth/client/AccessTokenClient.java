@@ -3,7 +3,8 @@ package org.entur.auth.client;
 import java.io.IOException;
 
 /**
- * An AccessTokenClient is an interface that defines a set of methods for interacting with an OAuth 2.0 access token service.
+ * An AccessTokenClient is an interface that defines a set of methods for interacting with an OAuth
+ * 2.0 access token service.
  */
 public interface AccessTokenClient {
 
@@ -17,7 +18,7 @@ public interface AccessTokenClient {
 
     /**
      * The renewAccessToken method is used to request a new access token using a refresh token.
-
+     *
      * @param refreshToken to be used for obtaining a new access token.
      * @return an object holding information about the token.
      * @throws IOException when authorization server not responding

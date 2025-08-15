@@ -1,26 +1,24 @@
 package org.entur.auth.client;
 
 import static com.google.common.truth.Truth.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Test;
-
-import org.junit.jupiter.api.TestMethodOrder;
 
 import java.io.IOException;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 
 @TestMethodOrder(MethodOrderer.MethodName.class)
 public class AccessTokenFactoryTest {
 
     @Test
-    void testExceptionFromRequestAccessToken() throws IOException, AccessTokenUnavailableException  {
+    void testExceptionFromRequestAccessToken() throws IOException, AccessTokenUnavailableException {
 
         AccessTokenClient client = mock(AccessTokenClient.class);
 
@@ -73,7 +71,10 @@ public class AccessTokenFactoryTest {
     }
 
     @Test
-    void testCreateAndSoftRenewSession() throws IOException, AccessTokenUnavailableException, InterruptedException { // i.e. no refresh token
+    void testCreateAndSoftRenewSession()
+            throws IOException,
+                    AccessTokenUnavailableException,
+                    InterruptedException { // i.e. no refresh token
 
         AccessTokenClient client = mock(AccessTokenClient.class);
 
@@ -101,9 +102,9 @@ public class AccessTokenFactoryTest {
         verify(client, never()).renewAccessToken(any(String.class));
     }
 
-
     @Test
-    void testCreateAndLeaveSoftRefreshSessionToAnotherThread() throws IOException, AccessTokenUnavailableException {
+    void testCreateAndLeaveSoftRefreshSessionToAnotherThread()
+            throws IOException, AccessTokenUnavailableException {
 
         AccessTokenClient client = mock(AccessTokenClient.class);
 
@@ -149,34 +150,34 @@ public class AccessTokenFactoryTest {
         verify(client, never()).renewAccessToken(any(String.class));
     }
 
-
     private TokenHolder getResponseWithRefreshToken(String token) {
-    	TokenHolder holder = mock(TokenHolder.class);
-    	
-    	when(holder.getAccessToken()).thenReturn(token);
-    	when(holder.getExpiresIn()).thenReturn(300L);
-    	when(holder.getRefreshToken()).thenReturn("refreshToken");
-    	
-        return holder;
-    }
-    
-    private TokenHolder getResponseWithoutRefreshToken(String token) {
         TokenHolder holder = mock(TokenHolder.class);
-        
+
         when(holder.getAccessToken()).thenReturn(token);
         when(holder.getExpiresIn()).thenReturn(300L);
-        
+        when(holder.getRefreshToken()).thenReturn("refreshToken");
+
         return holder;
     }
 
-    private ConfigurableClockAccessTokenFactory getConfigurableClockFactory(AccessTokenClient client) {
+    private TokenHolder getResponseWithoutRefreshToken(String token) {
+        TokenHolder holder = mock(TokenHolder.class);
+
+        when(holder.getAccessToken()).thenReturn(token);
+        when(holder.getExpiresIn()).thenReturn(300L);
+
+        return holder;
+    }
+
+    private ConfigurableClockAccessTokenFactory getConfigurableClockFactory(
+            AccessTokenClient client) {
         ConfigurableClockAccessTokenFactory factory = new ConfigurableClockAccessTokenFactory(client);
         configure(factory);
         return factory;
     }
 
     private AccessTokenFactory getFactory(AccessTokenClient client) {
-    	AccessTokenFactory factory = new AccessTokenFactory(client);
+        AccessTokenFactory factory = new AccessTokenFactory(client);
         configure(factory);
         return factory;
     }
@@ -188,5 +189,4 @@ public class AccessTokenFactoryTest {
         factory.setMinThrottleTime(1L);
         factory.setMaxThrottleTime(600L);
     }
-
 }

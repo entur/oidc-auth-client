@@ -7,16 +7,15 @@ import java.lang.annotation.Target;
 
 /**
  * Annotation to mark a field can handle an access token.
- * <p>
- * This annotation is typically used to indicate that a field can handle an access token,
- * which may be required for authentication or authorization in an application.
- * </p>
  *
- * <p>
- * The optional {@code value} parameter can be used to specify accessor for AccessTokenFactory to be used for handling the access token.
- * </p>
+ * <p>This annotation is typically used to indicate that a field can handle an access token, which
+ * may be required for authentication or authorization in an application.
  *
- * <p><b>Usage:</b></p>
+ * <p>The optional {@code value} parameter can be used to specify accessor for AccessTokenFactory to
+ * be used for handling the access token.
+ *
+ * <p><b>Usage:</b>
+ *
  * <pre>
  * public class AuthData {
  *     {@literal @}AccessToken("auth0")
@@ -33,9 +32,8 @@ public @interface AccessToken {
 
     /**
      * Optional metadata associated with the access token.
-     * <p>
-     * This can be used to specify accessor for AccessTokenFactory.
-     * </p>
+     *
+     * <p>This can be used to specify accessor for AccessTokenFactory.
      *
      * @return a descriptive string (default is an empty string).
      */

@@ -1,5 +1,8 @@
 package org.entur.auth.client;
 
+import java.io.IOException;
+import java.lang.reflect.Field;
+import java.util.Collections;
 import org.springframework.beans.BeansException;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.ApplicationContext;
@@ -10,46 +13,46 @@ import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.web.client.RestTemplate;
 
-import java.io.IOException;
-import java.lang.reflect.Field;
-import java.util.Collections;
-
 /**
  * Utility class responsible for processing beans annotated with {@link AccessToken} and injecting
  * customized {@link RestTemplate} instances that automatically include bearer tokens.
  */
 class AccessTokenProcessor {
     /**
-     * Processes the given bean before initialization by injecting a custom {@link RestTemplate}
-     * if the bean contains fields annotated with {@link AccessToken}.
+     * Processes the given bean before initialization by injecting a custom {@link RestTemplate} if
+     * the bean contains fields annotated with {@link AccessToken}.
      *
      * @param applicationContext the Spring application context
      * @param bean the bean instance being initialized
      * @param beanName the name of the bean
      * @return the processed bean
      */
-    public static Object postProcessBeforeInitialization(ApplicationContext applicationContext, Object bean, String beanName) {
+    public static Object postProcessBeforeInitialization(
+            ApplicationContext applicationContext, Object bean, String beanName) {
         Class<?> clazz = bean.getClass();
-        ReflectionUtils.doWithFields(clazz, field -> {
-            if (field.isAnnotationPresent(AccessToken.class)) {
-                if (AccessTokenFactory.class.isAssignableFrom(field.getType())) {
-                    AccessTokenAnnotationAccessTokenFactoryProcessor.inject(applicationContext, bean, field);
-                } else if (isAssignableFrom(applicationContext.getClassLoader(), field.getType())) {
-                    AccessTokenAnnotationRestTemplateProcessor.inject(applicationContext, bean, field);
-                }
-            }
-        });
+        ReflectionUtils.doWithFields(
+                clazz,
+                field -> {
+                    if (field.isAnnotationPresent(AccessToken.class)) {
+                        if (AccessTokenFactory.class.isAssignableFrom(field.getType())) {
+                            AccessTokenAnnotationAccessTokenFactoryProcessor.inject(
+                                    applicationContext, bean, field);
+                        } else if (isAssignableFrom(applicationContext.getClassLoader(), field.getType())) {
+                            AccessTokenAnnotationRestTemplateProcessor.inject(applicationContext, bean, field);
+                        }
+                    }
+                });
 
         return bean;
     }
 
-    private static boolean isAssignableFrom(ClassLoader classLoader,
-                                            Class<?> targetType) {
+    private static boolean isAssignableFrom(ClassLoader classLoader, Class<?> targetType) {
 
         var candidateClassName = "org.springframework.web.client.RestTemplate";
         try {
             ClassLoader ccl = Thread.currentThread().getContextClassLoader();
-            Class<?> candidate = Class.forName(candidateClassName, false, ccl == null ? classLoader : ccl);
+            Class<?> candidate =
+                    Class.forName(candidateClassName, false, ccl == null ? classLoader : ccl);
             return candidate.isAssignableFrom(targetType);
         } catch (ClassNotFoundException | LinkageError ignored) {
             return false;
@@ -57,7 +60,8 @@ class AccessTokenProcessor {
     }
 
     /**
-     * Internal processor responsible for injecting {@link AccessTokenFactory} instances into fields annotated with {@link AccessToken}.
+     * Internal processor responsible for injecting {@link AccessTokenFactory} instances into fields
+     * annotated with {@link AccessToken}.
      */
     static class AccessTokenAnnotationAccessTokenFactoryProcessor {
         /**
@@ -70,14 +74,16 @@ class AccessTokenProcessor {
         public static void inject(ApplicationContext applicationContext, Object bean, Field field) {
             ReflectionUtils.makeAccessible(field);
             AccessToken annotation = field.getAnnotation(AccessToken.class);
-            AccessTokenFactory accessTokenFactory = AccessTokenAnnotationRestTemplateProcessor.getAccessTokenFactory(applicationContext, annotation.value());
+            AccessTokenFactory accessTokenFactory =
+                    AccessTokenAnnotationRestTemplateProcessor.getAccessTokenFactory(
+                            applicationContext, annotation.value());
             ReflectionUtils.setField(field, bean, accessTokenFactory);
         }
-
     }
 
     /**
-     * Internal processor responsible for injecting {@link RestTemplate} instances into fields annotated with {@link AccessToken}.
+     * Internal processor responsible for injecting {@link RestTemplate} instances into fields
+     * annotated with {@link AccessToken}.
      */
     static class AccessTokenAnnotationRestTemplateProcessor {
         /**
@@ -90,11 +96,16 @@ class AccessTokenProcessor {
         public static void inject(ApplicationContext applicationContext, Object bean, Field field) {
             ReflectionUtils.makeAccessible(field);
             AccessToken annotation = field.getAnnotation(AccessToken.class);
-            AccessTokenFactory accessTokenFactory = getAccessTokenFactory(applicationContext, annotation.value());
+            AccessTokenFactory accessTokenFactory =
+                    getAccessTokenFactory(applicationContext, annotation.value());
 
-            RestTemplate restTemplate = new RestTemplateBuilder()
-                    .interceptors(Collections.singletonList(new AccessTokenAnnotationRestTemplateProcessor.BearerTokenInterceptor(accessTokenFactory)))
-                    .build();
+            RestTemplate restTemplate =
+                    new RestTemplateBuilder()
+                            .interceptors(
+                                    Collections.singletonList(
+                                            new AccessTokenAnnotationRestTemplateProcessor.BearerTokenInterceptor(
+                                                    accessTokenFactory)))
+                            .build();
             ReflectionUtils.setField(field, bean, restTemplate);
         }
 
@@ -106,7 +117,8 @@ class AccessTokenProcessor {
          * @return the resolved {@link AccessTokenFactory} bean
          * @throws IllegalStateException if no suitable {@link AccessTokenFactory} bean is found
          */
-        public static AccessTokenFactory getAccessTokenFactory(ApplicationContext applicationContext, String name) {
+        public static AccessTokenFactory getAccessTokenFactory(
+                ApplicationContext applicationContext, String name) {
             try {
                 if (name == null || name.isBlank()) {
                     return applicationContext.getBean(AccessTokenFactory.class);
@@ -114,16 +126,17 @@ class AccessTokenProcessor {
                     return applicationContext.getBean(name, AccessTokenFactory.class);
                 }
             } catch (BeansException e) {
-                throw new IllegalStateException("No AccessTokenFactory bean found for qualifier: " + name, e);
+                throw new IllegalStateException(
+                        "No AccessTokenFactory bean found for qualifier: " + name, e);
             }
         }
 
         /**
-         * Custom interceptor that appends an Authorization header with a bearer token to each HTTP request.
+         * Custom interceptor that appends an Authorization header with a bearer token to each HTTP
+         * request.
          */
-        private record BearerTokenInterceptor(
-                AccessTokenFactory accessTokenFactory
-        ) implements ClientHttpRequestInterceptor {
+        private record BearerTokenInterceptor(AccessTokenFactory accessTokenFactory)
+                implements ClientHttpRequestInterceptor {
 
             /**
              * Intercepts an HTTP request to inject a bearer token into the Authorization header.
@@ -135,7 +148,9 @@ class AccessTokenProcessor {
              * @throws IOException if an I/O error occurs
              */
             @Override
-            public ClientHttpResponse intercept(HttpRequest request, byte[] body, ClientHttpRequestExecution execution) throws IOException {
+            public ClientHttpResponse intercept(
+                    HttpRequest request, byte[] body, ClientHttpRequestExecution execution)
+                    throws IOException {
                 request.getHeaders().setBearerAuth(accessTokenFactory.getAccessToken());
                 return execution.execute(request, body);
             }

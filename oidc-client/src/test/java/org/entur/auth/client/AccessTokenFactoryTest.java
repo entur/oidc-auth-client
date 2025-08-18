@@ -89,7 +89,6 @@ public class AccessTokenFactoryTest {
         String accessToken = factory.getAccessToken();
         assertEquals(first.getAccessToken(), accessToken);
 
-
         // simulate leap in time
         factory.incrementTime((300 - 20) * 1000);
 

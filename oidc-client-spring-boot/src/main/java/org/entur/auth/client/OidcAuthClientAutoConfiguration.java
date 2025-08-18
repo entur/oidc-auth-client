@@ -1,6 +1,7 @@
 package org.entur.auth.client;
 
-
+import java.util.Map;
+import java.util.Map.Entry;
 import org.entur.auth.client.properties.OidcAuthClientAuth0Properties;
 import org.entur.auth.client.properties.OidcAuthClientProperties;
 import org.entur.auth.client.properties.OidcAuthClientsProperties;
@@ -26,9 +27,6 @@ import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 
-import java.util.Map;
-import java.util.Map.Entry;
-
 @Configuration
 @EnableConfigurationProperties({OidcAuthClientsProperties.class, OidcAuthClientProperties.class})
 public class OidcAuthClientAutoConfiguration {
@@ -45,7 +43,13 @@ public class OidcAuthClientAutoConfiguration {
     /*
      * Logs the configuration details of a client.
      */
-    private static void logClientConfiguration(String name, OidcAuthClientAuth0Properties oidcAuthProperties, Long mustRefreshThreshold, Long shouldRefreshThreshold, Long minThrottleTime, Long maxThrottleTime) {
+    private static void logClientConfiguration(
+            String name,
+            OidcAuthClientAuth0Properties oidcAuthProperties,
+            Long mustRefreshThreshold,
+            Long shouldRefreshThreshold,
+            Long minThrottleTime,
+            Long maxThrottleTime) {
         log.info("Starting Client configuration: {}", name);
         log.info("Client client ID: {}", oidcAuthProperties.getClientId());
         if (oidcAuthProperties.getSecret() == null || oidcAuthProperties.getSecret().isBlank()) {
@@ -53,10 +57,26 @@ public class OidcAuthClientAutoConfiguration {
         }
         log.info("Client domain: {}", oidcAuthProperties.getDomain());
         log.info("Client audience: {}", oidcAuthProperties.getAudience());
-        log.info("Client must refresh threshold: {}", oidcAuthProperties.getMustRefreshThreshold() == null ? mustRefreshThreshold : oidcAuthProperties.getMustRefreshThreshold());
-        log.info("Client should refresh threshold: {}", oidcAuthProperties.getShouldRefreshThreshold() == null ? shouldRefreshThreshold : oidcAuthProperties.getShouldRefreshThreshold());
-        log.info("Client min throttle time: {}", oidcAuthProperties.getMinThrottleTime() == null ? minThrottleTime : oidcAuthProperties.getMinThrottleTime());
-        log.info("Client max throttle time: {}", oidcAuthProperties.getMaxThrottleTime() == null ? maxThrottleTime : oidcAuthProperties.getMaxThrottleTime());
+        log.info(
+                "Client must refresh threshold: {}",
+                oidcAuthProperties.getMustRefreshThreshold() == null
+                        ? mustRefreshThreshold
+                        : oidcAuthProperties.getMustRefreshThreshold());
+        log.info(
+                "Client should refresh threshold: {}",
+                oidcAuthProperties.getShouldRefreshThreshold() == null
+                        ? shouldRefreshThreshold
+                        : oidcAuthProperties.getShouldRefreshThreshold());
+        log.info(
+                "Client min throttle time: {}",
+                oidcAuthProperties.getMinThrottleTime() == null
+                        ? minThrottleTime
+                        : oidcAuthProperties.getMinThrottleTime());
+        log.info(
+                "Client max throttle time: {}",
+                oidcAuthProperties.getMaxThrottleTime() == null
+                        ? maxThrottleTime
+                        : oidcAuthProperties.getMaxThrottleTime());
     }
 
     /*
@@ -84,32 +104,38 @@ public class OidcAuthClientAutoConfiguration {
     /*
      * BeanDefinitionRegistryPostProcessor for dynamically registering beans based on clients configurations.
      */
-    public static class Auth0DynamicBeanDefinition implements BeanDefinitionRegistryPostProcessor, EnvironmentAware {
+    public static class Auth0DynamicBeanDefinition
+            implements BeanDefinitionRegistryPostProcessor, EnvironmentAware {
         private OidcAuthClientsProperties properties;
 
         @Override
-        public void postProcessBeanFactory(@NonNull ConfigurableListableBeanFactory factory) throws BeansException {/* Do nothing */}
+        public void postProcessBeanFactory(@NonNull ConfigurableListableBeanFactory factory)
+                throws BeansException {
+            /* Do nothing */
+        }
 
         @Override
         public void setEnvironment(@Nullable Environment environment) {
             if (environment != null) {
-                this.properties = Binder
-                        .get(environment)
-                        .bind("entur.clients", OidcAuthClientsProperties.class)
-                        .orElse(new OidcAuthClientsProperties());
+                this.properties =
+                        Binder.get(environment)
+                                .bind("entur.clients", OidcAuthClientsProperties.class)
+                                .orElse(new OidcAuthClientsProperties());
             }
         }
 
         @Override
-        public void postProcessBeanDefinitionRegistry(@NonNull BeanDefinitionRegistry registry) throws BeansException {
+        public void postProcessBeanDefinitionRegistry(@NonNull BeanDefinitionRegistry registry)
+                throws BeansException {
             Map<String, OidcAuthClientAuth0Properties> clients = properties.getAuth0();
 
             for (Entry<String, OidcAuthClientAuth0Properties> entry : clients.entrySet()) {
-                registry.registerBeanDefinition(entry.getKey(), BeanDefinitionBuilder
-                        .rootBeanDefinition(AccessTokenFactory.class)
-                        .setFactoryMethodOnBean("createInstance", "dynamicBeanAccessTokenFactory")
-                        .addConstructorArgValue(entry.getKey())
-                        .getBeanDefinition());
+                registry.registerBeanDefinition(
+                        entry.getKey(),
+                        BeanDefinitionBuilder.rootBeanDefinition(AccessTokenFactory.class)
+                                .setFactoryMethodOnBean("createInstance", "dynamicBeanAccessTokenFactory")
+                                .addConstructorArgValue(entry.getKey())
+                                .getBeanDefinition());
             }
         }
     }
@@ -127,29 +153,50 @@ public class OidcAuthClientAutoConfiguration {
 
         AccessTokenFactory createInstance(String beanId) {
             var beanProperties = clientsProperties.getAuth0().get(beanId);
-            logClientConfiguration(beanId, beanProperties, clientsProperties.getMustRefreshThreshold(), clientsProperties.getShouldRefreshThreshold(), clientsProperties.getMinThrottleTime(), clientsProperties.getMaxThrottleTime());
+            logClientConfiguration(
+                    beanId,
+                    beanProperties,
+                    clientsProperties.getMustRefreshThreshold(),
+                    clientsProperties.getShouldRefreshThreshold(),
+                    clientsProperties.getMinThrottleTime(),
+                    clientsProperties.getMaxThrottleTime());
 
             return new AccessTokenFactoryBuilder()
                     .withDomain(beanProperties.getDomain())
                     .withClientSecret(beanProperties.getSecret())
                     .withClientId(beanProperties.getClientId())
                     .withAudience(beanProperties.getAudience())
-                    .withMustRefreshThreshold(beanProperties.getMustRefreshThreshold() != null ? beanProperties.getMustRefreshThreshold() : clientsProperties.getMustRefreshThreshold())
-                    .withShouldRefreshThreshold(beanProperties.getShouldRefreshThreshold() != null ? beanProperties.getShouldRefreshThreshold() : clientsProperties.getShouldRefreshThreshold())
-                    .withMinThrottleTime(beanProperties.getMinThrottleTime() != null ? beanProperties.getMinThrottleTime() : clientsProperties.getMinThrottleTime())
-                    .withMaxThrottleTime(beanProperties.getMaxThrottleTime() != null ? beanProperties.getMaxThrottleTime() : clientsProperties.getMaxThrottleTime())
+                    .withMustRefreshThreshold(
+                            beanProperties.getMustRefreshThreshold() != null
+                                    ? beanProperties.getMustRefreshThreshold()
+                                    : clientsProperties.getMustRefreshThreshold())
+                    .withShouldRefreshThreshold(
+                            beanProperties.getShouldRefreshThreshold() != null
+                                    ? beanProperties.getShouldRefreshThreshold()
+                                    : clientsProperties.getShouldRefreshThreshold())
+                    .withMinThrottleTime(
+                            beanProperties.getMinThrottleTime() != null
+                                    ? beanProperties.getMinThrottleTime()
+                                    : clientsProperties.getMinThrottleTime())
+                    .withMaxThrottleTime(
+                            beanProperties.getMaxThrottleTime() != null
+                                    ? beanProperties.getMaxThrottleTime()
+                                    : clientsProperties.getMaxThrottleTime())
                     .buildAuth0();
         }
     }
 
     /**
-     * A {@link BeanPostProcessor} that processes beans annotated with access token-related annotations.
-     * This processor ensures that beans are properly initialized with access token handling capabilities.
+     * A {@link BeanPostProcessor} that processes beans annotated with access token-related
+     * annotations. This processor ensures that beans are properly initialized with access token
+     * handling capabilities.
      *
-     * <p>The processor is only active if {@code org.springframework.web.client.RestTemplate} is present
-     * in the classpath, making it conditional on the presence of Spring's {@code RestTemplate}.</p>
+     * <p>The processor is only active if {@code org.springframework.web.client.RestTemplate} is
+     * present in the classpath, making it conditional on the presence of Spring's {@code
+     * RestTemplate}.
      *
-     * <p>It utilizes the {@link AccessTokenProcessor} to perform the actual processing before initialization.</p>
+     * <p>It utilizes the {@link AccessTokenProcessor} to perform the actual processing before
+     * initialization.
      */
     @Component
     @ConditionalOnClass(name = "org.springframework.web.client.RestTemplate")
@@ -168,13 +215,14 @@ public class OidcAuthClientAutoConfiguration {
         /**
          * Processes beans before their initialization to handle access token-related annotations.
          *
-         * @param bean     the bean instance being processed
+         * @param bean the bean instance being processed
          * @param beanName the name of the bean
          * @return the processed bean, potentially wrapped or modified
          */
         @Override
         public Object postProcessBeforeInitialization(Object bean, String beanName) {
-            return AccessTokenProcessor.postProcessBeforeInitialization(applicationContext, bean, beanName);
+            return AccessTokenProcessor.postProcessBeforeInitialization(
+                    applicationContext, bean, beanName);
         }
     }
 }

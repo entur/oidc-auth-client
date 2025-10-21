@@ -1,7 +1,5 @@
 package org.entur.auth.client;
 
-import java.util.Map;
-import java.util.Map.Entry;
 import org.entur.auth.client.properties.OidcAuthClientAuth0Properties;
 import org.entur.auth.client.properties.OidcAuthClientProperties;
 import org.entur.auth.client.properties.OidcAuthClientsProperties;
@@ -50,11 +48,15 @@ public class OidcAuthClientAutoConfiguration {
             Long shouldRefreshThreshold,
             Long minThrottleTime,
             Long maxThrottleTime) {
+
         log.info("Starting Client configuration: {}", name);
+
         log.info("Client client ID: {}", oidcAuthProperties.getClientId());
+
         if (oidcAuthProperties.getSecret() == null || oidcAuthProperties.getSecret().isBlank()) {
             log.warn("Client secret is missing, please check your configuration.");
         }
+
         log.info("Client domain: {}", oidcAuthProperties.getDomain());
         log.info("Client audience: {}", oidcAuthProperties.getAudience());
         log.info(
@@ -83,7 +85,11 @@ public class OidcAuthClientAutoConfiguration {
      * Configures and returns an AccessTokenFactory bean from client configuration.
      */
     @Bean("auth0")
-    @ConditionalOnProperty(name = {"entur.client.auth0.clientId"})
+    @ConditionalOnProperty(name = "entur.client.auth0.clientId")
+    @ConditionalOnProperty(
+            name = "entur.client.auth0.enabled",
+            havingValue = "true",
+            matchIfMissing = true)
     @ConditionalOnMissingBean(AccessTokenFactory.class)
     public AccessTokenFactory auth0(OidcAuthClientProperties properties) {
         OidcAuthClientAuth0Properties oidcAuthProperties = properties.getAuth0();
@@ -127,15 +133,16 @@ public class OidcAuthClientAutoConfiguration {
         @Override
         public void postProcessBeanDefinitionRegistry(@NonNull BeanDefinitionRegistry registry)
                 throws BeansException {
-            Map<String, OidcAuthClientAuth0Properties> clients = properties.getAuth0();
 
-            for (Entry<String, OidcAuthClientAuth0Properties> entry : clients.entrySet()) {
-                registry.registerBeanDefinition(
-                        entry.getKey(),
-                        BeanDefinitionBuilder.rootBeanDefinition(AccessTokenFactory.class)
-                                .setFactoryMethodOnBean("createInstance", "dynamicBeanAccessTokenFactory")
-                                .addConstructorArgValue(entry.getKey())
-                                .getBeanDefinition());
+            for (var entry : properties.getAuth0().entrySet()) {
+                if (entry.getValue().getEnabled()) {
+                    registry.registerBeanDefinition(
+                            entry.getKey(),
+                            BeanDefinitionBuilder.rootBeanDefinition(AccessTokenFactory.class)
+                                    .setFactoryMethodOnBean("createInstance", "dynamicBeanAccessTokenFactory")
+                                    .addConstructorArgValue(entry.getKey())
+                                    .getBeanDefinition());
+                }
             }
         }
     }

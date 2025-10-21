@@ -1,6 +1,7 @@
 package org.entur.auth.client.properties;
 
 public final class OidcAuthClientAuth0Properties {
+    private boolean enabled = true;
 
     private String domain;
     private String clientId;
@@ -12,6 +13,14 @@ public final class OidcAuthClientAuth0Properties {
 
     private Long minThrottleTime;
     private Long maxThrottleTime;
+
+    public boolean getEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
 
     public String getDomain() {
         return domain;

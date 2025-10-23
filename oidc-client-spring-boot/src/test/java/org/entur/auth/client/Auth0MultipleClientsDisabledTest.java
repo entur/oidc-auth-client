@@ -1,7 +1,7 @@
 package org.entur.auth.client;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import org.entur.auth.client.auth0.Auth0AccessTokenClient;
 import org.junit.jupiter.api.Test;
@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
@@ -46,11 +45,9 @@ public class Auth0MultipleClientsDisabledTest {
     @Qualifier("two")
     private AccessTokenFactory accessTokenFactory2;
 
-    @LocalServerPort private int randomServerPort;
-
     @Test
     public void testCreate() {
-        assertFalse(accessTokenFactory1.getClient() instanceof Auth0AccessTokenClient);
-        assertTrue(accessTokenFactory2.getClient() instanceof Auth0AccessTokenClient);
+        assertNull(accessTokenFactory1.getClient());
+        assertInstanceOf(Auth0AccessTokenClient.class, accessTokenFactory2.getClient());
     }
 }

@@ -1,14 +1,12 @@
 package org.entur.auth.client;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
-import org.entur.auth.client.auth0.Auth0AccessTokenClient;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
@@ -32,10 +30,8 @@ public class Auth0ConfigurationDisabledTest {
 
     @MockitoBean private AccessTokenFactory accessTokenFactory;
 
-    @LocalServerPort private int randomServerPort;
-
     @Test
     public void testDisabled() {
-        assertFalse(accessTokenFactory.getClient() instanceof Auth0AccessTokenClient);
+        assertNull(accessTokenFactory.getClient());
     }
 }

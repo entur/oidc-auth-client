@@ -26,11 +26,12 @@ For single client configurations, the name will always be "auth0".
 ```yaml
 entur:
   client:
-    shouldRefreshThreshold: 120 # Time (seconds) before proactive token refresh. Default=120.
-    mustRefreshThreshold: 60    # Minimum time (seconds) before forced token refresh. Default=60. 
-    minThrottleTime: 1          # Throttle time will increase exponentially from min to max throttle time. Default=1.
-    maxThrottleTime: 600        # Default 600 (10 minutes).
+    shouldRefreshThreshold: 120     # Optional: Time (seconds) before proactive token refresh. Default=120.
+    mustRefreshThreshold: 60        # Optional: Minimum time (seconds) before forced token refresh. Default=60. 
+    minThrottleTime: 1              # Optional: Throttle time will increase exponentially from min to max throttle time. Default=1.
+    maxThrottleTime: 600            # Optional: Default 600 (10 minutes).
     auth0:
+      enabled: true|false           # Optional: Enable/disable this client definition. Default true
       clientId: <clientId>
       secret: <secret>
       domain: <your.domain>
@@ -44,17 +45,19 @@ The example below will set up clients multiple with the names "myFirstClient" an
 ```yaml
 entur:
   clients:
-    shouldRefreshThreshold: 120 # Time (seconds) before proactive token refresh. Default=120.
-    mustRefreshThreshold: 60    # Minimum time (seconds) before forced token refresh. Default=60.
-    minThrottleTime: 1          # Throttle time will increase exponentially from min to max throttle time. Default=1.
-    maxThrottleTime: 600        # Default 600 (10 minutes).
+    shouldRefreshThreshold: 120     # Optional: Time (seconds) before proactive token refresh. Default=120.
+    mustRefreshThreshold: 60        # Optional: Minimum time (seconds) before forced token refresh. Default=60.
+    minThrottleTime: 1              # Optional: Throttle time will increase exponentially from min to max throttle time. Default=1.
+    maxThrottleTime: 600            # Optional: Default 600 (10 minutes).
     auth0:
       myFirstClient:
+        enabled: true|false         # Optional: Enable/disable this client definition. Default true
         clientId: <clientId>
         secret: <secret>
         domain: <your.domain>
         audience: <your audience>
       mySecondClient:
+        enabled: true|false         # Optional: Enable/disable this client definition. Default true
         clientId: <clientId>
         secret: <secret>
         domain: <your.domain>

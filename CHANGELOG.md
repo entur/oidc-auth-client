@@ -1,6 +1,9 @@
 # [Release notes](https://github.com/entur/oidc-auth-client)
+## oidc-auth-client v2.1.0
+* Add support for `enabled` flag for clients.
+
 ## oidc-auth-client v2.0.1
-* Fix JRelease deployment
+* Fix JRelease deployment.
 
 ## oidc-auth-client v2.0.0
 * Remove api dependencies

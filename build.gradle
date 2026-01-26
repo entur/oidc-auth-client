@@ -8,13 +8,13 @@ plugins {
 
 subprojects {
     ext {
-        auth0JavaVersion = '2.26.0'
+        auth0JavaVersion = '3.0.0'
         junitJupiterVersion  = '5.13.1'
         wiremockVersion = '3.12.0'
         mockitoVersion = '5.11.0'
         guavaVersion = '33.5.0-jre'
         lombokVersion = '1.18.36'
-        springBoot3Version = '3.5.7'
+        springBoot3Version = '4.0.2'
         caffeineVersion = "3.2.3"
         slf4jVersion = '2.0.17'
         logback14xVersion = '1.5.18'

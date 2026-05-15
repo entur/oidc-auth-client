@@ -14,7 +14,7 @@ subprojects {
         mockitoVersion = '5.11.0'
         guavaVersion = '33.5.0-jre'
         lombokVersion = '1.18.36'
-        springBoot3Version = '3.5.7'
+        springBootVersion = '3.5.14'
         caffeineVersion = "3.2.3"
         slf4jVersion = '2.0.17'
         logback14xVersion = '1.5.18'

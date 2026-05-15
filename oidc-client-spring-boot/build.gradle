@@ -23,10 +23,12 @@ dependencies {
     api("com.auth0:auth0:${auth0JavaVersion}")
 
     compileOnly("org.springframework.boot:spring-boot-starter-web")
+    implementation("org.springframework.boot:spring-boot-restclient")
 
     // Dependencies required to run tests
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.springframework.boot:spring-boot-starter-web")
+    testImplementation("org.springframework.boot:spring-boot-starter-webmvc-test")
 }
 
 spotbugs {

@@ -13,11 +13,11 @@ dependencies {
     api project(":oidc-client")
     api("com.auth0:auth0:${auth0JavaVersion}")
 
-    compileOnly("org.springframework.boot:spring-boot-starter-web:${springBoot3Version}")
+    compileOnly("org.springframework.boot:spring-boot-starter-web:${springBootVersion}")
 
     // Dependencies required to run tests
-    testImplementation("org.springframework.boot:spring-boot-starter-test:${springBoot3Version}")
-    testImplementation("org.springframework.boot:spring-boot-starter-web:${springBoot3Version}")
+    testImplementation("org.springframework.boot:spring-boot-starter-test:${springBootVersion}")
+    testImplementation("org.springframework.boot:spring-boot-starter-web:${springBootVersion}")
 }
 
 spotbugs {

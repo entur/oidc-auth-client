@@ -1,4 +1,7 @@
 # [Release notes](https://github.com/entur/oidc-auth-client)
+## oidc-auth-client v3.0.0
+* Migrate project to Spring Boot 4.
+
 ## oidc-auth-client v2.1.0
 * Add support for `enabled` flag for clients.
 

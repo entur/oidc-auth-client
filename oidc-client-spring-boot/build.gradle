@@ -1,6 +1,9 @@
+import org.springframework.boot.gradle.plugin.SpringBootPlugin
+
 plugins {
     id 'oidcAuth.java-conventions'
     id 'oidcAuth.library-conventions'
+    id 'io.spring.dependency-management'
 }
 
 java {
@@ -9,15 +12,24 @@ java {
     }
 }
 
+dependencyManagement {
+    imports {
+        mavenBom SpringBootPlugin.BOM_COORDINATES
+    }
+}
+
 dependencies {
     api project(":oidc-client")
     api("com.auth0:auth0:${auth0JavaVersion}")
 
-    compileOnly("org.springframework.boot:spring-boot-starter-web:${springBoot3Version}")
+    compileOnly("org.springframework.boot:spring-boot-starter-web")
+    compileOnly("org.springframework.boot:spring-boot-starter-restclient")
 
     // Dependencies required to run tests
-    testImplementation("org.springframework.boot:spring-boot-starter-test:${springBoot3Version}")
-    testImplementation("org.springframework.boot:spring-boot-starter-web:${springBoot3Version}")
+    testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation("org.springframework.boot:spring-boot-starter-web")
+    testImplementation("org.springframework.boot:spring-boot-starter-webmvc-test")
+    testImplementation("org.springframework.boot:spring-boot-starter-restclient-test")
 }
 
 spotbugs {

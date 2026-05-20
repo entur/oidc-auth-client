@@ -4,18 +4,22 @@ on:
     inputs:
       next_version:
         description: "Version bump"
-        required: false
+        required: true
         type: choice
         options:
           - major
           - minor
           - patch
-        default: "patch"
+      snapshot:
+        description: "Is Snapshot"
+        required: true
+        type: boolean
 
 jobs:
   publish:
-    name: Publish Snapshot to Maven Central
+    name: Publish to Maven Central
     uses: entur/gha-maven-central/.github/workflows/gradle-publish.yml@v1
     with:
       next_version: ${{ inputs.next_version }}
+      snapshot: ${{ inputs.snapshot }}
     secrets: inherit

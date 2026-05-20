@@ -18,6 +18,11 @@ dependencies {
     // Dependencies required to run tests
     testImplementation("org.springframework.boot:spring-boot-starter-test:${springBootVersion}")
     testImplementation("org.springframework.boot:spring-boot-starter-web:${springBootVersion}")
+
+    constraints {
+        compileOnly('org.apache.tomcat.embed:tomcat-embed-core:10.1.55') { because 'CVE-2026-41293' }
+        testImplementation('org.apache.tomcat.embed:tomcat-embed-core:10.1.55') { because 'CVE-2026-41293' }
+    }
 }
 
 spotbugs {

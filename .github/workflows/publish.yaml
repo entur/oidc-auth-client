@@ -4,7 +4,7 @@ on:
     inputs:
       next_version:
         description: "Version bump"
-        required: false
+        required: true
         type: choice
         options:
           - major
@@ -12,9 +12,8 @@ on:
           - patch
       snapshot:
         description: "Is Snapshot"
-        required: false
+        required: true
         type: boolean
-        default: true
 
 jobs:
   publish:

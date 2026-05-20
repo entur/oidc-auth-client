@@ -150,6 +150,9 @@ Run tests:
 ./gradlew test
 ```
 
+Releases are done using the publish.yaml workflow.
+Do not bump the version in gradle.properties manually!
+
 ## Contributing
 Contributions are welcome! See [CONTRIBUTING](/CONTRIBUTING.md) for details.
 

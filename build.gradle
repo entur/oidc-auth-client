@@ -19,14 +19,8 @@ plugins {
 subprojects {
     ext {
         auth0JavaVersion = '2.26.0'
-        junitJupiterVersion  = '5.13.1'
-        wiremockVersion = '3.12.0'
-        mockitoVersion = '5.11.0'
         guavaVersion = '33.5.0-jre'
-        lombokVersion = '1.18.36'
-        caffeineVersion = "3.2.3"
         slf4jVersion = '2.0.17'
-        logback14xVersion = '1.5.18'
     }
 }
 

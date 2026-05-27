@@ -24,6 +24,13 @@ dependencies {
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.springframework.boot:spring-boot-starter-webmvc-test")
     testImplementation("org.springframework.boot:spring-boot-starter-restclient-test")
+
+    constraints {
+        api('org.apache.tomcat.embed:tomcat-embed-core') {
+            version { require '11.0.22' }
+            because 'CVE-2026-41293'
+        }
+    }
 }
 
 spotbugs {

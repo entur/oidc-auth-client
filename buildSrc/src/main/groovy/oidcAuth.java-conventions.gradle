@@ -16,15 +16,9 @@ compileJava {
 }
 
 dependencies {
-    if(project.hasProperty('junitJupiterVersion')) {
-        testImplementation(platform("org.junit:junit-bom:${junitJupiterVersion}"))
-        testImplementation('org.junit.jupiter:junit-jupiter')
-        testRuntimeOnly('org.junit.platform:junit-platform-launcher')
-    }
-
-    if(project.hasProperty('mockitoVersion')) {
-        testImplementation("org.mockito:mockito-core:${mockitoVersion}")
-    }
+    testImplementation('org.junit.jupiter:junit-jupiter')
+    testRuntimeOnly('org.junit.platform:junit-platform-launcher')
+    testImplementation("org.mockito:mockito-core")
 }
 
 // Enable deprecation messages when compiling Java code

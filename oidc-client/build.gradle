@@ -1,3 +1,5 @@
+import static org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES
+
 plugins {
     id 'oidcAuth.java-conventions'
     id 'oidcAuth.library-conventions'
@@ -14,8 +16,10 @@ test {
 }
 
 dependencies {
+    api(platform(BOM_COORDINATES))
+
     api("org.slf4j:slf4j-api:${slf4jVersion}")
-    api("com.github.ben-manes.caffeine:caffeine:${caffeineVersion}")
+    api("com.github.ben-manes.caffeine:caffeine")
 
     implementation("com.auth0:auth0:${auth0JavaVersion}")
 

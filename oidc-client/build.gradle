@@ -27,15 +27,6 @@ dependencies {
     testImplementation("com.google.guava:guava-testlib:${guavaVersion}")
 
     constraints {
-        // Jackson 2 comes in via auth0; the Spring Boot BOM manages 2.21.5.
-        api('com.fasterxml.jackson.core:jackson-databind') {
-            version { require '2.21.7' }
-            because 'Fixes CVE-2026-19032, CVE-2026-68497, CVE-2026-83557, CVE-2026-91776 and CVE-2026-91777. Remove when the Spring Boot BOM manages >= 2.21.7'
-        }
-        api('com.fasterxml.jackson.core:jackson-core') {
-            version { require '2.21.7' }
-            because 'Fixes CVE-2026-89407 and CVE-2026-89425. Remove when the Spring Boot BOM manages >= 2.21.7'
-        }
         implementation('com.squareup.okhttp3:okhttp') {
             version { require '4.12.1' }
             because 'Addresses CVE-2026-111943. Remove when auth0 uses >= 4.12.1'

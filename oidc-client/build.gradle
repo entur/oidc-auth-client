@@ -18,12 +18,12 @@ test {
 dependencies {
     api(platform(BOM_COORDINATES))
 
-    api("org.slf4j:slf4j-api:${slf4jVersion}")
+    api("org.slf4j:slf4j-api")
     api("com.github.ben-manes.caffeine:caffeine")
 
     implementation("com.auth0:auth0:${auth0JavaVersion}")
 
-    testRuntimeOnly("org.slf4j:slf4j-simple:2.0.17")
+    testRuntimeOnly("org.slf4j:slf4j-simple")
     testImplementation("com.google.guava:guava-testlib:${guavaVersion}")
 
     constraints {

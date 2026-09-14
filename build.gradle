@@ -13,14 +13,14 @@ plugins {
     id 'com.github.ben-manes.versions' version '0.53.0' apply false
     id "com.github.spotbugs" version "6.4.5" apply false
     id 'com.diffplug.spotless' version "8.1.0" apply false
-    id 'org.springframework.boot' version "4.0.6" apply false
+    id 'org.springframework.boot' version "4.1.0" apply false
 }
 
 subprojects {
     ext {
-        auth0JavaVersion = '2.26.0'
-        guavaVersion = '33.5.0-jre'
-        slf4jVersion = '2.0.17'
+        auth0JavaVersion = '2.27.0'
+        guavaVersion = '33.6.0-jre'
+        slf4jVersion = '2.0.18'
     }
 }
 

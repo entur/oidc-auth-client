@@ -36,6 +36,14 @@ dependencies {
             version { require '2.21.7' }
             because 'Fixes CVE-2026-89407 and CVE-2026-89425. Remove when the Spring Boot BOM manages >= 2.21.7'
         }
+        implementation('com.squareup.okhttp3:okhttp') {
+            version { require '4.12.1' }
+            because 'Addresses CVE-2026-111943. Remove when auth0 uses >= 4.12.1'
+        }
+        implementation('com.squareup.okhttp3:logging-interceptor') {
+            version { require '4.12.1' }
+            because 'Align with OkHttp'
+        }
     }
 }
 

@@ -1,4 +1,9 @@
 # [Release notes](https://github.com/entur/oidc-auth-client)
+## oidc-auth-client v3.1.0
+* Upgrade to latest version of Spring Boot 4.1
+* Upgrade dependencies
+* Upgrade Gradle wrapper
+
 ## oidc-auth-client v3.0.0
 * Migrate project to Spring Boot 4.
 

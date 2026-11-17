@@ -20,7 +20,7 @@ buildscript {
 plugins {
     id 'base'
     id 'org.jreleaser' version "1.27.0"
-    id 'com.github.ben-manes.versions' version '0.67.0' apply false
+    id 'io.github.ben-manes.versions' version '0.67.0' apply false
     id "com.github.spotbugs" version "6.5.13" apply false
     id 'com.diffplug.spotless' version "8.9.0" apply false
     id 'org.springframework.boot' version "4.1.2" apply false

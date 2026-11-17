@@ -7,7 +7,7 @@ plugins {
     // NOTE: external plugin version is specified in implementation dependency artifact of the project's build file
     id 'com.diffplug.spotless'
     id 'com.github.spotbugs'
-    id 'com.github.ben-manes.versions'
+    id 'io.github.ben-manes.versions'
 }
 
 compileJava {
@@ -44,8 +44,8 @@ spotbugsMain {
 spotless {
     java {
         googleJavaFormat("1.17.0")
-        indentWithTabs(2)
-        indentWithSpaces(4)
+        leadingSpacesToTabs(2)
+        leadingTabsToSpaces(4)
     }
 }
 
@@ -84,7 +84,7 @@ eclipse {
 // Tell idea to output to build/classes/main instead of /out/
 idea {
     module {
-        outputDir file('build/classes/main')
-        testOutputDir file('build/classes/test')
+        outputDir = file('build/classes/main')
+        testOutputDir = file('build/classes/test')
     }
 }

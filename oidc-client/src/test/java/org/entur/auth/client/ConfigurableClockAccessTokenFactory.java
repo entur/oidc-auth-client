@@ -6,7 +6,7 @@ import java.time.Clock;
 import java.time.Instant;
 import java.util.concurrent.TimeUnit;
 
-public class ConfigurableClockAccessTokenFactory extends AccessTokenFactory {
+public final class ConfigurableClockAccessTokenFactory extends AccessTokenFactory {
     private final FakeTicker fakeTicker = new FakeTicker();
 
     public ConfigurableClockAccessTokenFactory(AccessTokenClient client) {

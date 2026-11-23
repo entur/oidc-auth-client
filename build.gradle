@@ -3,14 +3,14 @@ buildscript {
         resolutionStrategy {
             // JReleaser needs JGit 5.13.x, Spotless pulls in 7.x: https://github.com/jreleaser/jreleaser/issues/1643
             // Latest 5.13.x, so CVE-2023-4759 is fixed.
-            force 'org.eclipse.jgit:org.eclipse.jgit:5.13.5.202508271544-r'
+            force 'org.eclipse.jgit:org.eclipse.jgit:7.8.1.202611041320-r'
         }
     }
 
     // Last-resort pins for the build classpath (plugins only, not the published libraries).
     dependencies {
         constraints {
-            classpath('org.codehaus.plexus:plexus-utils:3.6.1') {
+            classpath('org.codehaus.plexus:plexus-utils:4.2.0') {
                 because 'GHSA-6fmv-xxpf-w3cw. Remove when jreleaser-gradle-plugin pulls in plexus-utils >= 3.6.1'
             }
         }
@@ -28,7 +28,7 @@ plugins {
 
 subprojects {
     ext {
-        auth0JavaVersion = '2.27.0'
+        auth0JavaVersion = '5.5.0'
         guavaVersion = '33.8.0-jre'
     }
 }
